@@ -34,5 +34,21 @@ namespace HPlusSport.API.Controllers
             }
             return NotFound($"Product with Id {productId} not found.");
         }
+
+        [HttpPost]        
+        public async Task<ActionResult<Product>> CreateProduct(Product productToBeCreated)
+        {
+            Category? category = await _context.Categories.FindAsync(productToBeCreated.CategoryId); 
+            if (category == null)
+            {
+                return BadRequest($"Category {productToBeCreated.CategoryId} is not a valid category.");
+            }
+
+            productToBeCreated.Category = category;
+            _context.Products.Add(productToBeCreated);
+
+            var result = await _context.SaveChangesAsync();
+            return CreatedAtAction( "GetProduct", new { productId = productToBeCreated.Id}, productToBeCreated);
+        }
     }
 }
