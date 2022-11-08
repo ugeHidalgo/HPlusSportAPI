@@ -2,7 +2,6 @@
 
 namespace HPlusSport.API.Models
 {
-    {
     public static class ModelBuilderExtensions
     {
         public static void Seed(this ModelBuilder modelBuilder)
@@ -50,5 +49,4 @@ namespace HPlusSport.API.Models
                 new Product { Id = 33, CategoryId = 5, Name = "Vitamin D3 1000 IU (100 tablets)", Sku = "SVD3", Price = 12.49M, IsAvailable = true });
         }
     }
-}
 }

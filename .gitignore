@@ -159,3 +159,6 @@ Ex_Files_Building_Web_APIs_ASP_NET_Core_dot_NET_6/Exercise Files/End_0308/HPlusS
 Ex_Files_Building_Web_APIs_ASP_NET_Core_dot_NET_6/Exercise Files/End_0308/HPlusSport/HPlusSport.API/Models/Product.cs
 Ex_Files_Building_Web_APIs_ASP_NET_Core_dot_NET_6/Exercise Files/End_0308/HPlusSport/HPlusSport.API/Models/ShopContext.cs
 Ex_Files_Building_Web_APIs_ASP_NET_Core_dot_NET_6/Exercise Files/End_0308/HPlusSport/HPlusSport.API/Properties/launchSettings.json
+/HPlusSport.API/bin/Debug/net6.0
+/HPlusSport.API/obj/Debug/net6.0/ref
+/HPlusSport.API/obj/Debug/net6.0/refint
