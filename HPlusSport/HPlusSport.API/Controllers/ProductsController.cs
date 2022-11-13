@@ -80,6 +80,41 @@ namespace HPlusSport.API.Controllers
             }                 
         }
 
+        [HttpDelete]
+        [Route("{productId}")]
+        public async Task<ActionResult<Product>> DeleteProduct(int productId)
+        {
+            Product? product = await _context.Products.FindAsync(productId);
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+                return new ActionResult<Product>(product);
+            }
+            return NotFound($"Product with Id {productId} not found.");
+        }
+
+        [HttpPost]
+        [Route("Delete")]
+        public async Task<ActionResult> DeleteProducts([FromQuery] int[] productIds)
+        {
+            IList<Product> products = new List<Product>();
+            foreach (int productId in productIds)
+            {
+                Product? product = await _context.Products.FindAsync(productId);
+                if (product == null)
+                {                    
+                    return NotFound($"Product with Id {productId} not found.");
+                }
+                products.Add(product);
+            }
+            
+            _context.Products.RemoveRange(products);
+            await _context.SaveChangesAsync();                
+            
+            return Ok(products);
+        }
+
         #endregion
 
         #region Private methods
