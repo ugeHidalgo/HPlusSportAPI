@@ -11,9 +11,12 @@ namespace HPlusSport.API.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Product>().HasKey(p => p.Id);
             modelBuilder.Entity<Category>().HasMany(p => p.Products).WithOne(c => c.Category).HasForeignKey(a=>a.CategoryId);
 
             modelBuilder.Seed();
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

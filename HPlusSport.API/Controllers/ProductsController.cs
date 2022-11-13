@@ -16,6 +16,8 @@ namespace HPlusSport.API.Controllers
             _context.Database.EnsureCreated();
         }
 
+        #region Public methods
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
@@ -47,8 +49,64 @@ namespace HPlusSport.API.Controllers
             productToBeCreated.Category = category;
             _context.Products.Add(productToBeCreated);
 
-            var result = await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return CreatedAtAction( "GetProduct", new { productId = productToBeCreated.Id}, productToBeCreated);
         }
+
+        [HttpPut]
+        [Route("{productId}")]
+        public async Task<ActionResult<Product>> UpdateProduct(int productId, [FromBody] Product productToBeUpdated)
+        {
+            if (productId != productToBeUpdated.Id)
+            {
+                return BadRequest($"ProductId: {productId} and id on the product: {productToBeUpdated.Id} are not equal.");
+            }
+
+            Category? category = await _context.Categories.FindAsync(productToBeUpdated.CategoryId);
+            if (category == null)
+            {
+                return BadRequest($"Category {productToBeUpdated.CategoryId} is not a valid category.");
+            }
+            productToBeUpdated.Category = category;
+
+            bool IsProductOnDb = _context.Products.Any(x => x.Id == productId);
+            if (!IsProductOnDb)
+            {
+                return await CreateProduct(productToBeUpdated);
+            }
+            else
+            {
+                return await UpdateProduct(productToBeUpdated);
+            }                 
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private async Task<ActionResult<Product>> UpdateProduct(Product productToBeUpdated)
+        {
+            try
+            {
+                _context.Products.Update(productToBeUpdated);
+                _context.Entry(productToBeUpdated).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return new ActionResult<Product>(productToBeUpdated);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                bool IsProductOnDb = _context.Products.Any(x => x.Id == productToBeUpdated.Id);
+                if (!IsProductOnDb)
+                {
+                    return NotFound("Product was removed.");
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        #endregion
     }
 }
