@@ -95,7 +95,7 @@ namespace HPlusSport.API.Controllers
         }
 
         [HttpPost]
-        [Route("Delete")]
+        [Route("Delete")] //use products/delete?productIds=1&productIds=2
         public async Task<ActionResult> DeleteProducts([FromQuery] int[] productIds)
         {
             IList<Product> products = new List<Product>();
