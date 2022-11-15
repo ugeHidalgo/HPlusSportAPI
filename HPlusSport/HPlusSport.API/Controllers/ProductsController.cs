@@ -26,6 +26,7 @@ namespace HPlusSport.API.Controllers
         //  api/products?size=25&page=2&MinPrice=5&MaxPrice=10
         //  api/products?MinPrice=5&MaxPrice=10
         //  api/products?MinPrice=5
+        //  api/products?Name=jeans
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts([FromQuery]ProductQueryParameters queryParameters)
         {
@@ -39,6 +40,16 @@ namespace HPlusSport.API.Controllers
             if (queryParameters.MaxPrice != null)
             {
                 products = products.Where(x => x.Price <= queryParameters.MaxPrice);
+            }
+
+            if (!string.IsNullOrEmpty(queryParameters.Name))
+            {
+                products = products.Where(x => x.Name.ToLower().Contains(queryParameters.Name.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(queryParameters.Sku))
+            {
+                products = products.Where(x => x.Sku == queryParameters.Sku);
             }
 
             products = products
