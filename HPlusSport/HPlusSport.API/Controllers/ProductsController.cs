@@ -18,11 +18,19 @@ namespace HPlusSport.API.Controllers
 
         #region Public methods
 
+        //Use cases:
+        //  api/Products
+        //  api/Products?size=10
+        //  api/products?size=25&page=2
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts([FromQuery]QueryParameters queryParameters)
         {
-            IEnumerable<Product> products = await _context.Products.ToArrayAsync();
-            return Ok(products);
+            IQueryable<Product> products = _context.Products;
+            products = products
+                .Skip(queryParameters.Size * (queryParameters.Page - 1))
+                .Take(queryParameters.Size);
+            
+            return Ok(await products.ToArrayAsync());
         }
 
         [HttpGet]
