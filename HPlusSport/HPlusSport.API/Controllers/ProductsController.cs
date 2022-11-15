@@ -27,6 +27,7 @@ namespace HPlusSport.API.Controllers
         //  api/products?MinPrice=5&MaxPrice=10
         //  api/products?MinPrice=5
         //  api/products?Name=jeans
+        //  api/products?SortBy=Price&sortOrder=desc
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts([FromQuery]ProductQueryParameters queryParameters)
         {
@@ -52,11 +53,14 @@ namespace HPlusSport.API.Controllers
                 products = products.Where(x => x.Sku == queryParameters.Sku);
             }
 
+            if (!string.IsNullOrEmpty(queryParameters.SortBy) && typeof(Product).GetProperty(queryParameters.SortBy) != null)
+            {
+                products = products.OrderByCustom(queryParameters.SortBy, queryParameters.SortOrder);
+            }
+
             products = products
                 .Skip(queryParameters.Size * (queryParameters.Page - 1))
-                .Take(queryParameters.Size);                
-
-           
+                .Take(queryParameters.Size);           
             
             return Ok(await products.ToArrayAsync());
         }
