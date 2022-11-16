@@ -4,4 +4,6 @@
 
 /HPlusSport/HPlusSport.API/obj
 /HPlusSport/.vs/HPlusSport
-/HPlusSport/HPlusSport.Web
+/HPlusSport/HPlusSport.Web/bin/Debug/net6.0
+/HPlusSport/HPlusSport.Web/obj
+/HPlusSport/HPlusSport.Web/wwwroot
